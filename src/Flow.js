@@ -11,13 +11,17 @@ export default class Flow {
     constructor(canvas_id) {
         this.params = {
             r: 200,
-            n_paths: 200,
-            n_steps: 50,
-            step_size: 1,
-            stroke_width: 3,
+            n_paths: 2000,
+            n_steps: 106,
+            step_size: 5,
+            stroke_width: 1,
             scale: 100,
             seed: 1000,
             allow_intersect: true,
+            map_min1: -1,
+            map_max1: 1,
+            map_min2: 0,
+            map_max2: 2*Math.PI,
         }
 
         Number.prototype.map = function (in_min, in_max, out_min, out_max) {
@@ -34,6 +38,10 @@ export default class Flow {
         this.noise3D = makeNoise3D(Date.now());
         // make the noise available as a static variable 
         Path.noise3D = this.noise3D
+        Path.map_min1 = this.params.map_min1
+        Path.map_max1 = this.params.map_max1
+        Path.map_min2 = this.params.map_min2
+        Path.map_max2 = this.params.map_max2
 
         this.center = paper.view.center;
 
@@ -81,9 +89,9 @@ export default class Flow {
             // move
             for (let i = 0; i < this.params.n_steps; i++) {
                 p1.move(this.params.scale, this.params.seed, this.params.step_size)
-                if(this.paths.some(p => {
+                if(!this.params.allow_intersect && this.paths.some(p => {
                     return p.path.hitTest(p1.lastVertex)
-                    //return p.path.intersects(p1.path) // not enough, hittest is better
+                    //return p.path.intersects(p1.path) // still too much overlap, hittest is better
                 })) {
                     break
                 }
@@ -97,6 +105,44 @@ export default class Flow {
 
     init_gui() {
         this.gui.add(this, 'randomize').name('Randomize');
+
+        let map = this.gui.addFolder('map');
+
+        map.add(this.params, 'map_min1',-1, 1).onFinishChange((value) => {
+            this.params.map_min1 = value
+            Path.map_min1 = this.params.map_min1
+            Path.map_max1 = this.params.map_max1
+            Path.map_min2 = this.params.map_min2
+            Path.map_max2 = this.params.map_max2
+            this.reset()
+        });
+
+        map.add(this.params, 'map_max1',-1, 1).onFinishChange((value) => {
+            this.params.map_max1 = value
+            Path.map_min1 = this.params.map_min1
+            Path.map_max1 = this.params.map_max1
+            Path.map_min2 = this.params.map_min2
+            Path.map_max2 = this.params.map_max2
+            this.reset()
+        });
+
+        map.add(this.params, 'map_min2', -2*Math.PI, 2*Math.PI).onFinishChange((value) => {
+            this.params.map_min2 = value
+            Path.map_min1 = this.params.map_min1
+            Path.map_max1 = this.params.map_max1
+            Path.map_min2 = this.params.map_min2
+            Path.map_max2 = this.params.map_max2
+            this.reset()
+        });
+
+        map.add(this.params, 'map_max2', -2*Math.PI, 2*Math.PI).onFinishChange((value) => {
+            this.params.map_max2 = value
+            Path.map_min1 = this.params.map_min1
+            Path.map_max1 = this.params.map_max1
+            Path.map_min2 = this.params.map_min2
+            Path.map_max2 = this.params.map_max2
+            this.reset()
+        });
 
         let flow = this.gui.addFolder('flow');
 
@@ -132,10 +178,10 @@ export default class Flow {
             this.reset()
         });
 
-        /* this.gui.add(this.params, 'allow_intersect').name("allow_intersect (!)").onChange((value) => {
+        this.gui.add(this.params, 'allow_intersect').name("allow_intersect (!)").onChange((value) => {
             this.params.allow_intersect = value
             this.reset()
-        }); */
+        });
 
         this.gui.add(this, 'exportSVG').name('Export SVG');
         this.gui.add(this, 'exportSVG_no_overlap').name('SVG no overlap (slow)');

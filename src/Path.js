@@ -15,7 +15,7 @@ export default class Path {
         
         let dir, v
         dir = Path.noise3D(this.lastVertex.x / scale, this.lastVertex.y / scale, seed)
-        dir = dir.map(-.5, .5, 0, 2*Math.PI)
+        dir = dir.map(Path.map_min1, Path.map_max1, Path.map_min2, Path.map_max2)
         dir = PVector.fromAngle(dir)
         dir.mult(step_size)
         v = this.lastVertex.clone().add([dir.x, dir.y])
