@@ -29,6 +29,7 @@
     "file-saver": "^2.0.2",
     "lodash": "^4.17.15",
     "open-simplex-noise": "^2.2.0",
-    "paper": "^0.12.4"
+    "paper": "^0.12.4",
+    "pvectorjs": "^2.0.3"
   }
 }
