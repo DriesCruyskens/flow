@@ -4,7 +4,7 @@ import * as paper from 'paper';
 import { saveAs } from 'file-saver';
 import * as _ from 'lodash';
 import Path from './Path.js'
-import * as PVector from 'pvectorjs';
+
 
 export default class Flow {
 
@@ -64,7 +64,6 @@ export default class Flow {
     draw() {
 
         // init
-        this.paths = []
         for (let i = 0; i < this.params.n_paths; i++) {
             // init
             let o = new paper.Point(this.random(-this.params.r, this.params.r),
@@ -76,70 +75,21 @@ export default class Flow {
             let p1 = new Path(paper, this.center.clone().add(o))
 
             // move
-            let dir, v
             for (let i = 0; i < this.params.n_steps; i++) {
-                dir = this.noise3D(p1.lastVertex.x / this.params.scale, p1.lastVertex.y / this.params.scale, this.params.seed)
-                dir = dir.map(-1, 1, 0, 2*Math.PI)
-                dir = PVector.fromAngle(dir)
-                dir.mult(this.params.step_size)
-                v = p1.lastVertex.clone().add([dir.x, dir.y])
-
+                p1.move(this.params.scale, this.params.seed, this.params.step_size)
                 if(!this.params.allow_intersect && this.paths.some(p => {
                     return p.path.intersects(p1.path)
                 })) {
                     break
                 }
-
-                p1.move(v)
             }
-
             p1.path.smooth()
-            this.paths.push(p1)
         }
-
-        /* // add neighboring points
-        let other, d1, d2
-        this.paths.forEach((p, i) => {
-            other = [...this.paths]
-            other.splice(i, 1)
-            other = other.sort((p1, p2) => {
-                d1 = p.o.getDistance(p1.o)
-                d2 = p.o.getDistance(p2.o)
-                return d1 < d2 ? -1 : 1
-            })
-            p.neighbors = [...other.slice(0, this.params.n_neighbors)]
-        })
-
-        console.log(this.paths) */
-
-        // move
-        /* let x, y, dir, v
-        for (let i = 0; i < this.params.n_steps; i++) {
-            this.paths.forEach((p1, i1) => {
-                if (!p1.neighbors.some(p2 => {
-                    return p2 == p1 ? false : p2.path.intersects(p1.path) // most inefficient thing ever
-                })) {
-                    dir = this.noise3D(p1.lastVertex.x / this.params.scale, p1.lastVertex.y / this.params.scale, 0)
-                    dir = dir.map(-1, 1, 0, 2*Math.PI)
-                    dir = PVector.fromAngle(dir)
-                    v = p1.lastVertex.clone().add([dir.x, dir.y])
-                    p1.move(v)
-                } else {
-                    this.paths.splice(i1, 1)
-                }
-                
-            })
-        } */
         
         paper.view.draw();
     }
 
     init_gui() {
-        /* this.gui.add(this.params, 'draw_original_path').onChange((value) => {
-            this.path.visible = value
-            paper.view.draw()
-        }); */
-
         this.gui.add(this, 'randomize').name('Randomize');
 
         let flow = this.gui.addFolder('flow');
