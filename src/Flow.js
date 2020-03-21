@@ -11,10 +11,10 @@ export default class Flow {
     constructor(canvas_id) {
         this.params = {
             r: 200,
-            n_paths: 2000,
-            n_steps: 60,
-            step_size: 10,
-            stroke_width: 1,
+            n_paths: 200,
+            n_steps: 50,
+            step_size: 1,
+            stroke_width: 3,
             scale: 100,
             seed: 1000,
             allow_intersect: true,
@@ -32,6 +32,7 @@ export default class Flow {
         this.canvas = document.getElementById(canvas_id);
         paper.setup(this.canvas);
         this.noise3D = makeNoise3D(Date.now());
+        // make the noise available as a static variable 
         Path.noise3D = this.noise3D
 
         this.center = paper.view.center;
@@ -64,7 +65,9 @@ export default class Flow {
 
     draw() {
 
-        // init
+        // initialize n_paths and move them n_steps (one at a time)
+        // stop drawing path is intersection is detected and not allowed
+        this.paths = []
         for (let i = 0; i < this.params.n_paths; i++) {
             // init
             let o = new paper.Point(this.random(-this.params.r, this.params.r),
@@ -78,13 +81,15 @@ export default class Flow {
             // move
             for (let i = 0; i < this.params.n_steps; i++) {
                 p1.move(this.params.scale, this.params.seed, this.params.step_size)
-                if(!this.params.allow_intersect && this.paths.some(p => {
-                    return p.path.intersects(p1.path)
+                if(this.paths.some(p => {
+                    return p.path.hitTest(p1.lastVertex)
+                    //return p.path.intersects(p1.path) // not enough, hittest is better
                 })) {
                     break
                 }
             }
             p1.path.smooth()
+            this.paths.push(p1)
         }
         
         paper.view.draw();
