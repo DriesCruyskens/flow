@@ -32,6 +32,7 @@ export default class Flow {
         this.canvas = document.getElementById(canvas_id);
         paper.setup(this.canvas);
         this.noise3D = makeNoise3D(Date.now());
+        Path.noise3D = this.noise3D
 
         this.center = paper.view.center;
 
