@@ -69,6 +69,9 @@ export default class Flow {
         };
         paper.project.clear();
 
+        // make map parameters available as static variable inside Path
+        this.mapToPath()
+
         this.draw();
     }
 
@@ -119,25 +122,21 @@ export default class Flow {
 
         map.add(this.params, 'mapMin1',-1, 1).onFinishChange((value) => {
             this.params.mapMin1 = value;
-            this.mapToPath()
             this.reset();
         });
 
         map.add(this.params, 'mapMax1',-1, 1).onFinishChange((value) => {
             this.params.mapMax1 = value;
-            this.mapToPath()
             this.reset();
         });
 
         map.add(this.params, 'mapMin2', -2*Math.PI, 2*Math.PI).onFinishChange((value) => {
             this.params.mapMin2 = value;
-            this.mapToPath()
             this.reset();
         });
 
         map.add(this.params, 'mapMax2', -2*Math.PI, 2*Math.PI).onFinishChange((value) => {
             this.params.mapMax2 = value;
-            this.mapToPath()
             this.reset();
         });
 
