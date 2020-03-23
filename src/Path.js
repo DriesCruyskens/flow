@@ -11,13 +11,13 @@ export default class Path {
         this.lastVertex = this.origin
     }
 
-    move(scale, seed, step_size) {
+    move(scale, seed, stepSize) {
         
         let dir, v
         dir = Path.noise3D(this.lastVertex.x / scale, this.lastVertex.y / scale, seed)
-        dir = dir.map(Path.map_min1, Path.map_max1, Path.map_min2, Path.map_max2)
+        dir = dir.map(Path.mapMin1, Path.mapMax1, Path.mapMin2, Path.mapMax2)
         dir = PVector.fromAngle(dir)
-        dir.mult(step_size)
+        dir.mult(stepSize)
         v = this.lastVertex.clone().add([dir.x, dir.y])
 
         this.path.add(v)
