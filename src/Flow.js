@@ -180,7 +180,7 @@ export default class Flow {
         });
 
         this.gui.add(this, 'exportSVG').name('Export SVG');
-        this.gui.add(this, 'exportSVGNoOverlap').name('SVG no overlap (slow)');
+        this.gui.add(this, 'exportSVGNoOverlap').name('SVG 4 plot (!)');
     }
 
     exportSVGNoOverlap() {
