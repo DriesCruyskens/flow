@@ -87,11 +87,13 @@ export default class Flow {
         this.paths = [];
         for (let i = 0; i < this.params.nPaths; i++) {
             // init
-            let o = new paper.Point(this.random(-this.params.r, this.params.r),
-            this.random(-this.params.r, this.params.r));
-            while (o.getDistance([0, 0]) > this.params.r) {
+            let o; // starting point (origin)
+            do {
                 o = new paper.Point(this.random(-this.params.r, this.params.r),
                 this.random(-this.params.r, this.params.r));
+            }
+            while (o.getDistance([0, 0]) > this.params.r) {
+                
             }
             let p1 = new Path(paper, this.center.clone().add(o));
 
