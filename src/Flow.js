@@ -57,6 +57,7 @@ export default class Flow {
 
     randomize() {
         this.noise3D = makeNoise3D(Date.now());
+        this.params.seed = Math.random() * 2000
         this.reset();
     }
 
