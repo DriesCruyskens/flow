@@ -15,7 +15,12 @@ export default class Flow {
             nSteps: 17,
             stepSize: 5,
             strokeWidth: 1.5,
-            scale: 100,
+            scale1: 100,
+            scale2: 100,
+            scale3: 100,
+            fbm1_amp: 0, // if this one is 0, it's turned off
+            fbm2_amp: 1,
+            fbm3_amp: 1,
             seed: 1000,
             allowIntersect: true,
             mapMin1: -1,
@@ -100,7 +105,15 @@ export default class Flow {
 
             // move
             for (let i = 0; i < this.params.nSteps; i++) {
-                p1.move(this.params.scale, this.params.seed, this.params.stepSize)
+                p1.move(
+                    this.params.seed, 
+                    this.params.stepSize,
+                    this.params.scale1, 
+                    this.params.scale2, 
+                    this.params.scale3,
+                    this.params.fbm1_amp,
+                    this.params.fbm2_amp,
+                    this.params.fbm3_amp)
                 if(!this.params.allowIntersect && this.paths.some(p => {
                     return p.path.hitTest(p1.lastVertex);
                     //return p.path.intersects(p1.path); // still too much overlap, hittest is better
@@ -165,12 +178,37 @@ export default class Flow {
             this.reset();
         });
 
-        flow.add(this.params, 'scale', 1, 1000).onFinishChange((value) => {
-            this.params.scale = value;
+        let fbm = this.gui.addFolder('fbm');
+
+        fbm.add(this.params, 'scale3', 0, 500).onFinishChange((value) => {
+            this.params.scale3 = value;
             this.reset();
         });
 
-        flow.open();
+        fbm.add(this.params, 'fbm3_amp', 0, 10).onFinishChange((value) => {
+            this.params.fbm3_amp = value;
+            this.reset();
+        });
+
+        fbm.add(this.params, 'scale2', 0, 500).onFinishChange((value) => {
+            this.params.scale2 = value;
+            this.reset();
+        });
+
+        fbm.add(this.params, 'fbm2_amp', 0, 10).onFinishChange((value) => {
+            this.params.fbm2_amp = value;
+            this.reset();
+        });
+
+        fbm.add(this.params, 'scale1', 0, 500).onFinishChange((value) => {
+            this.params.scale1 = value;
+            this.reset();
+        });
+
+        fbm.add(this.params, 'fbm1_amp', 0, 10).onFinishChange((value) => {
+            this.params.fbm1_amp = value;
+            this.reset();
+        });
 
         this.gui.add(this.params, 'seed', 0, 2000).onFinishChange((value) => {
             this.params.seed = value;
