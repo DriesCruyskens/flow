@@ -137,18 +137,25 @@ export default class Flow {
 
     let map = this.gui.addFolder("map");
 
-    map.add(this.params, "mapMin1", -1, 1).onFinishChange((value) => {
-      this.params.mapMin1 = value;
-      this.reset();
-    });
+    map
+      .add(this.params, "mapMin1", -1, 1)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.mapMin1 = value;
+        this.reset();
+      });
 
-    map.add(this.params, "mapMax1", -1, 1).onFinishChange((value) => {
-      this.params.mapMax1 = value;
-      this.reset();
-    });
+    map
+      .add(this.params, "mapMax1", -1, 1)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.mapMax1 = value;
+        this.reset();
+      });
 
     map
       .add(this.params, "mapMin2", -2 * Math.PI, 2 * Math.PI)
+      .listen()
       .onFinishChange((value) => {
         this.params.mapMin2 = value;
         this.reset();
@@ -156,6 +163,7 @@ export default class Flow {
 
     map
       .add(this.params, "mapMax2", -2 * Math.PI, 2 * Math.PI)
+      .listen()
       .onFinishChange((value) => {
         this.params.mapMax2 = value;
         this.reset();
@@ -166,6 +174,7 @@ export default class Flow {
     flow
       .add(this.params, "nPaths", 0, 3000)
       .step(1)
+      .listen()
       .onFinishChange((value) => {
         this.params.nPaths = value;
         this.reset();
@@ -174,57 +183,85 @@ export default class Flow {
     flow
       .add(this.params, "nSteps", 0, 300)
       .step(1)
+      .listen()
       .onFinishChange((value) => {
         this.params.nSteps = value;
         this.reset();
       });
 
-    flow.add(this.params, "stepSize", 1, 50).onFinishChange((value) => {
-      this.params.stepSize = value;
-      this.reset();
-    });
+    flow
+      .add(this.params, "stepSize", 1, 50)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.stepSize = value;
+        this.reset();
+      });
 
-    flow.add(this.params, "strokeWidth", 1, 3).onFinishChange((value) => {
-      this.params.strokeWidth = value;
-      this.reset();
-    });
+    flow
+      .add(this.params, "strokeWidth", 1, 3)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.strokeWidth = value;
+        this.reset();
+      });
 
     let fbm = this.gui.addFolder("fbm");
 
-    fbm.add(this.params, "scale3", 0, 500).onFinishChange((value) => {
-      this.params.scale3 = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "scale3", 0, 500)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.scale3 = value;
+        this.reset();
+      });
 
-    fbm.add(this.params, "fbm3_amp", 0, 10).onFinishChange((value) => {
-      this.params.fbm3_amp = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "fbm3_amp", 0, 10)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.fbm3_amp = value;
+        this.reset();
+      });
 
-    fbm.add(this.params, "scale2", 0, 500).onFinishChange((value) => {
-      this.params.scale2 = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "scale2", 0, 500)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.scale2 = value;
+        this.reset();
+      });
 
-    fbm.add(this.params, "fbm2_amp", 0, 10).onFinishChange((value) => {
-      this.params.fbm2_amp = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "fbm2_amp", 0, 10)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.fbm2_amp = value;
+        this.reset();
+      });
 
-    fbm.add(this.params, "scale1", 0, 500).onFinishChange((value) => {
-      this.params.scale1 = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "scale1", 0, 500)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.scale1 = value;
+        this.reset();
+      });
 
-    fbm.add(this.params, "fbm1_amp", 0, 10).onFinishChange((value) => {
-      this.params.fbm1_amp = value;
-      this.reset();
-    });
+    fbm
+      .add(this.params, "fbm1_amp", 0, 10)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.fbm1_amp = value;
+        this.reset();
+      });
 
-    this.gui.add(this.params, "seed", 0, 2000).onFinishChange((value) => {
-      this.params.seed = value;
-      this.reset();
-    });
+    this.gui
+      .add(this.params, "seed", 0, 2000)
+      .listen()
+      .onFinishChange((value) => {
+        this.params.seed = value;
+        this.reset();
+      });
 
     this.gui
       .add(this.params, "allowIntersect")
